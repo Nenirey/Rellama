@@ -1,0 +1,346 @@
+object Rellama: TRellama
+  MarginLeft = 0
+  MarginTop = 0
+  MarginRight = 0
+  MarginBottom = 0
+  Enabled = True
+  Left = 477
+  Top = 198
+  Width = 300
+  Height = 447
+  Text = 'Rellama v1.0'
+  ActivityMode = actMain
+  BackgroundColor = colbrBlack
+  ActionBarTitle = abtDefault
+  AnimationDurationIn = 1500
+  AnimationDurationOut = 1500
+  AnimationMode = animNone
+  OnActivityResult = RellamaActivityResult
+  OnJNIPrompt = RellamaJNIPrompt
+  OnClose = RellamaClose
+  OnCreateOptionMenu = RellamaCreateOptionMenu
+  OnClickOptionMenuItem = RellamaClickOptionMenuItem
+  OnCreateContextMenu = RellamaCreateContextMenu
+  OnActivityCreate = RellamaActivityCreate
+  OnActivityPause = RellamaActivityPause
+  OnActivityResume = RellamaActivityResume
+  object jButton1: jButton
+    MarginLeft = 2
+    MarginTop = 4
+    MarginRight = 2
+    MarginBottom = 4
+    Enabled = True
+    Left = 2
+    Top = 384
+    Width = 296
+    Height = 59
+    Visible = True
+    PosRelativeToAnchor = [raBelow]
+    PosRelativeToParent = [rpBottom, rpLeft, rpRight]
+    LayoutParamWidth = lpMatchParent
+    LayoutParamHeight = lpWrapContent
+    Text = 'Llamar'
+    BackgroundColor = colbrLimeGreen
+    FontColor = colbrWhite
+    FontSize = 25
+    FontSizeUnit = unitDefault
+    GravityInParent = lgNone
+    OnClick = jButton1Click
+    OnAfterDispatchDraw = jButton1AfterDispatchDraw
+  end
+  object jButton2: jButton
+    MarginLeft = 2
+    MarginTop = 4
+    MarginRight = 2
+    MarginBottom = 4
+    Enabled = True
+    Left = 2
+    Top = 4
+    Width = 296
+    Height = 50
+    Visible = True
+    PosRelativeToAnchor = [raBelow]
+    PosRelativeToParent = [rpTop]
+    LayoutParamWidth = lpMatchParent
+    LayoutParamHeight = lpWrapContent
+    Text = 'Contactos'
+    BackgroundColor = colbrDodgerBlue
+    FontColor = colbrWhite
+    FontSize = 0
+    FontSizeUnit = unitDefault
+    GravityInParent = lgNone
+    OnClick = jButton2Click
+  end
+  object jEditText1: jEditText
+    MarginLeft = 5
+    MarginTop = 5
+    MarginRight = 5
+    MarginBottom = 5
+    Enabled = True
+    Left = 5
+    Top = 63
+    Width = 290
+    Height = 39
+    Visible = True
+    Anchor = jButton2
+    PosRelativeToAnchor = [raBelow]
+    PosRelativeToParent = [rpLeft, rpRight]
+    LayoutParamWidth = lpOneThirdOfParent
+    LayoutParamHeight = lpWrapContent
+    Text = '911'
+    Alignment = taLeft
+    InputTypeEx = itxPhone
+    MaxTextLength = -1
+    BackgroundColor = colbrDefault
+    FontColor = colbrWhite
+    FontSize = 0
+    Hint = 'Ingrese el numero a llamar'
+    HintTextColor = colbrDefault
+    ScrollBarStyle = scrNone
+    MaxLines = 1
+    HorScrollBar = True
+    VerScrollBar = True
+    WrappingLine = False
+    Editable = True
+    FontSizeUnit = unitDefault
+    CloseSoftInputOnEnter = True
+    CapSentence = False
+    CaptureBackPressed = False
+    GravityInParent = lgNone
+    OnChange = jEditText1Change
+    OnChanged = jEditText1Changed
+  end
+  object jTextView2: jTextView
+    MarginLeft = 5
+    MarginTop = 5
+    MarginRight = 5
+    MarginBottom = 0
+    Enabled = True
+    Left = 5
+    Top = 112
+    Width = 49
+    Height = 20
+    Visible = True
+    Anchor = jEditText1
+    PosRelativeToAnchor = [raBelow]
+    PosRelativeToParent = [rpLeft]
+    LayoutParamWidth = lpWrapContent
+    LayoutParamHeight = lpWrapContent
+    Text = 'Intentos:'
+    Alignment = taLeft
+    BackgroundColor = colbrDefault
+    FontColor = colbrWhite
+    FontSize = 0
+    TextTypeFace = tfNormal
+    FontSizeUnit = unitDefault
+    GravityInParent = lgNone
+  end
+  object jTextView3: jTextView
+    MarginLeft = 5
+    MarginTop = 5
+    MarginRight = 5
+    MarginBottom = 0
+    Enabled = True
+    Left = 5
+    Top = 170
+    Width = 61
+    Height = 20
+    Visible = True
+    Anchor = jSeekBar1
+    PosRelativeToAnchor = [raBelow]
+    PosRelativeToParent = [rpLeft]
+    LayoutParamWidth = lpWrapContent
+    LayoutParamHeight = lpWrapContent
+    Text = 'Demora: 0'
+    Alignment = taLeft
+    BackgroundColor = colbrDefault
+    FontColor = colbrWhite
+    FontSize = 0
+    TextTypeFace = tfNormal
+    FontSizeUnit = unitDefault
+    GravityInParent = lgNone
+  end
+  object jSeekBar1: jSeekBar
+    MarginLeft = 10
+    MarginTop = 10
+    MarginRight = 10
+    MarginBottom = 0
+    Enabled = True
+    Left = 10
+    Top = 142
+    Width = 280
+    Height = 23
+    Visible = True
+    Anchor = jTextView2
+    PosRelativeToAnchor = [raBelow]
+    PosRelativeToParent = [rpLeft, rpRight]
+    LayoutParamWidth = lpFiveSixthOfParent
+    LayoutParamHeight = lpWrapContent
+    Max = 100
+    BackgroundColor = colbrDefault
+    GravityInParent = lgNone
+    OnProgressChanged = jSeekBar1ProgressChanged
+  end
+  object jSeekBar2: jSeekBar
+    MarginLeft = 10
+    MarginTop = 10
+    MarginRight = 10
+    MarginBottom = 0
+    Enabled = True
+    Left = 10
+    Top = 200
+    Width = 284
+    Height = 23
+    Visible = True
+    Anchor = jTextView3
+    PosRelativeToAnchor = [raBelow]
+    PosRelativeToParent = [rpLeft, rpRight]
+    LayoutParamWidth = lp95PercentOfParent
+    LayoutParamHeight = lpWrapContent
+    Max = 100
+    BackgroundColor = colbrDefault
+    GravityInParent = lgNone
+    OnProgressChanged = jSeekBar2ProgressChanged
+  end
+  object jSpinner1: jSpinner
+    MarginLeft = 5
+    MarginTop = 5
+    MarginRight = 5
+    MarginBottom = 5
+    Enabled = True
+    Left = 64
+    Top = 107
+    Width = 231
+    Height = 30
+    Visible = True
+    Anchor = jTextView2
+    PosRelativeToAnchor = [raToEndOf, raAlignBaseline]
+    PosRelativeToParent = [rpRight]
+    LayoutParamWidth = lp72px
+    LayoutParamHeight = lpWrapContent
+    Items.Strings = (
+      'x1'
+      'x2'
+      'x3'
+      'x4'
+      'x5'
+      'x6'
+      'x7'
+      'x8'
+      'x9'
+      'x10'
+      'x11'
+      'x12'
+      'x13'
+      'x14'
+      'x15'
+      'x16'
+      'x17'
+      'x18'
+      'x19'
+      'x20'
+      'x21'
+    )
+    BackgroundColor = colbrBlack
+    SelectedFontColor = colbrWhite
+    DropListTextColor = colbrWhite
+    DropListBackgroundColor = colbrBlack
+    LastItemAsPrompt = False
+    FontSize = 0
+    FontSizeUnit = unitDefault
+    Alignment = taCenter
+    TextTypeFace = tfNormal
+    SelectedIndex = 0
+    GravityInParent = lgNone
+    SelectedPaddingTop = 15
+    SelectedPaddingBottom = 5
+    OnItemSelected = jSpinner1ItemSelected
+  end
+  object jTextView1: jTextView
+    MarginLeft = 5
+    MarginTop = 5
+    MarginRight = 5
+    MarginBottom = 5
+    Enabled = True
+    Left = 127
+    Top = 261
+    Width = 46
+    Height = 114
+    Visible = True
+    Anchor = jButton1
+    PosRelativeToAnchor = [raAbove]
+    PosRelativeToParent = [rpCenterHorizontal]
+    LayoutParamWidth = lpWrapContent
+    LayoutParamHeight = lpWrapContent
+    Text = '0'
+    Alignment = taLeft
+    BackgroundColor = colbrDefault
+    FontColor = colbrWhite
+    FontSize = 80
+    TextTypeFace = tfBold
+    FontSizeUnit = unitDefault
+    GravityInParent = lgNone
+  end
+  object jCheckBox1: jCheckBox
+    MarginLeft = 5
+    MarginTop = 5
+    MarginRight = 5
+    MarginBottom = 5
+    Enabled = True
+    Left = 5
+    Top = 228
+    Width = 84
+    Height = 32
+    Visible = True
+    Anchor = jSeekBar2
+    PosRelativeToAnchor = [raBelow]
+    PosRelativeToParent = [rpLeft]
+    LayoutParamWidth = lpWrapContent
+    LayoutParamHeight = lpWrapContent
+    Text = 'Altavoz'
+    BackgroundColor = colbrDefault
+    FontColor = colbrWhite
+    FontSize = 0
+    Checked = False
+    FontSizeUnit = unitDefault
+  end
+  object jIntentManager1: jIntentManager
+    IntentAction = iaCall
+    left = 64
+    top = 5
+  end
+  object jTimer1: jTimer
+    Enabled = False
+    Interval = 1000
+    OnTimer = jTimer1Timer
+    left = 5
+    top = 5
+  end
+  object jContactManager1: jContactManager
+    OnGetContactsProgress = jContactManager1GetContactsProgress
+    left = 40
+    top = 264
+  end
+  object jTextFileManager1: jTextFileManager
+    left = 232
+    top = 264
+  end
+  object jTelephonyManager1: jTelephonyManager
+    OnCallStateChanged = jTelephonyManager1CallStateChanged
+    left = 232
+    top = 5
+  end
+  object jPreferences1: jPreferences
+    IsShared = False
+    left = 232
+    top = 328
+  end
+  object jMenu1: jMenu
+    left = 40
+    top = 320
+  end
+  object jContextMenu1: jContextMenu
+    left = 140
+    top = 245
+  end
+end
