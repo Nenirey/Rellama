@@ -152,9 +152,11 @@ begin
   begin
     if Pos(jEditText1.Text,contactInfo)>0 then
     begin
-      jButton2.Text:=ExtractWord(1,contactInfo,['|']);
-      if jEditText1.Text=ExtractWord(1,contactInfo,['|']) then
+      if isWordPresent(jEditText1.Text,contactInfo,['|']) then
+      begin
+        jButton2.Text:=ExtractWord(1,contactInfo,['|']);
         jButton2.SetCompoundDrawables(contactPhoto, cdsAbove);
+      end;
       continueListing:=false;
     end;
   end;
@@ -270,7 +272,7 @@ begin
   begin
     if buscando=false then
     begin
-      ShowMessage('Hasta pronto');
+      //ShowMessage('Hasta pronto');
       jPreferences1.SetStringData('lastnumber',jEditText1.Text);
       jPreferences1.SetStringData('lastname',jButton2.Text);
       jPreferences1.SetIntData('trycount',jSeekBar1.Progress);

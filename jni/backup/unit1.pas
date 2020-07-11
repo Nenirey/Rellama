@@ -109,6 +109,7 @@ begin
     begin
       ShowMessage('Debe conceder los permisos necesarios!!!');
     end;
+    Rellama.SetKeepScreenOn(true);
    end
    else
      ShowMessage('Debe poner al menos 1 intento');
@@ -151,9 +152,11 @@ begin
   begin
     if Pos(jEditText1.Text,contactInfo)>0 then
     begin
-      jButton2.Text:=ExtractWord(1,contactInfo,['|']);
-      if jEditText1.Text=ExtractWord(1,contactInfo,['|']) then
+      if isWordPresent(jEditText1.Text,contactInfo,['|']) then
+      begin
+        jButton2.Text:=ExtractWord(1,contactInfo,['|']);
         jButton2.SetCompoundDrawables(contactPhoto, cdsAbove);
+      end;
       continueListing:=false;
     end;
   end;
@@ -171,6 +174,7 @@ begin
   begin
     jButton1.Text:='Llamar';
     jButton1.BackgroundColor:=colbrLimeGreen;
+    Rellama.SetKeepScreenOn(false);
   end;
 end;
 
@@ -399,7 +403,8 @@ var
 begin
    //https://developer.android.com/guide/topics/security/permissions#normal-dangerous
    //https://www.captechconsulting.com/blogs/runtime-permissions-best-practices-and-how-to-gracefully-handle-permission-removal
-  jButton2.SetCompoundDrawables('ic_action_person_add', cdsRight);
+
+  jButton2.SetCompoundDrawables('ic_action_person_add', cdsLeft);
   if IsRuntimePermissionNeed() then   // that is, target API >= 23
    begin
       SetLength(manifestPermissions, 4);
