@@ -6,9 +6,10 @@ unit unit1;
 interface
   
 uses
-  Classes, SysUtils, strutils, And_jni, Laz_And_Controls,
-  AndroidWidget, intentmanager, seekbar, contactmanager, textfilemanager,
-  Spinner, telephonymanager, preferences, menu, contextmenu, modaldialog;
+  Classes, SysUtils, strutils, And_jni, Laz_And_Controls, AndroidWidget,
+  intentmanager, seekbar, contactmanager, textfilemanager, Spinner,
+  telephonymanager, preferences, menu, contextmenu, modaldialog, mediarecorder,
+  notificationmanager;
   
 type
 
@@ -18,16 +19,21 @@ type
       jButton1: jButton;
       jButton2: jButton;
       jCheckBox1: jCheckBox;
+      jCheckBox2: jCheckBox;
+      jCheckBox3: jCheckBox;
       jContactManager1: jContactManager;
       jContextMenu1: jContextMenu;
       jEditText1: jEditText;
       jIntentManager1: jIntentManager;
+      jMediaRecorder1: jMediaRecorder;
       jMenu1: jMenu;
       jModalDialog1: jModalDialog;
+      jNotificationManager1: jNotificationManager;
       jPreferences1: jPreferences;
       jSeekBar1: jSeekBar;
       jSeekBar2: jSeekBar;
       jSpinner1: jSpinner;
+      jSpinner2: jSpinner;
       jTelephonyManager1: jTelephonyManager;
       jTextFileManager1: jTextFileManager;
       jTextView1: jTextView;
@@ -36,6 +42,7 @@ type
       jTimer1: jTimer;
       procedure jButton1AfterDispatchDraw(Sender: TObject; canvas: JObject;
         tag: integer);
+      procedure jCheckBox2Click(Sender: TObject);
       procedure jContactManager1GetContactsProgress(Sender: TObject;
         contactInfo: string; contactShortInfo: string;
         contactPhotoUriAsString: string; contactPhoto: jObject;
@@ -66,6 +73,9 @@ type
       procedure RellamaCreateContextMenu(Sender: TObject; jObjMenu: jObject);
       procedure RellamaCreateOptionMenu(Sender: TObject; jObjMenu: jObject);
       procedure RellamaJNIPrompt(Sender: TObject);
+      procedure recordcall;
+      procedure SavePreferences;
+      procedure LoadPreferences;
     private
       {private declarations}
     public
@@ -83,15 +93,79 @@ implementation
 {$R *.lfm}
 
 { TRellama }
+procedure TRellama.SavePreferences;
+begin
+  jPreferences1.SetStringData('lastnumber',jEditText1.Text);
+  jPreferences1.SetStringData('lastname',jButton2.Text);
+  jPreferences1.SetIntData('trycount',jSeekBar1.Progress);
+  jPreferences1.SetIntData('delay',jSeekBar2.Progress);
+  jPreferences1.SetIntData('multiple',jSpinner1.SelectedIndex);
+  jPreferences1.SetBoolData('Speaker',jCheckBox1.Checked);
+  jPreferences1.SetIntData('Source',jSpinner2.SelectedIndex);
+  jPreferences1.SetBoolData('Hidden',jCheckBox3.Checked);
+end;
+
+procedure TRellama.LoadPreferences;
+begin
+  jSpinner1.SelectedIndex:=jPreferences1.GetIntData('multiple',0);
+  jButton2.Text:=jPreferences1.GetStringData('lastname','Contactos');
+  jEditText1.Text:=jPreferences1.GetStringData('lastnumber','');
+  jSeekBar1.Progress:=jPreferences1.GetIntData('trycount',5);
+  jSeekBar2.Progress:=jPreferences1.GetIntData('delay',3);
+  jCheckBox1.Checked:=jPreferences1.GetBoolData('Speaker',false);
+  jCheckBox2.Checked:=jPreferences1.GetBoolData('Record',false);
+  jSpinner2.SelectedIndex:=jPreferences1.GetIntData('Source',0);
+  jCheckBox3.Checked:=jPreferences1.GetBoolData('Hidden',false);
+end;
+
+procedure TRellama.recordcall;
+var
+  formato:TFormatSettings;
+begin
+  formato:=DefaultFormatSettings;
+  formato.DateSeparator:='_';
+  formato.TimeSeparator:='-';
+  if not IsRuntimePermissionNeed() then     //Target API < 23
+  begin
+     ShowMessage('Recording started ... [start]');
+     jMediaRecorder1.SetAudioSource(TAudioSource(jSpinner2.SelectedIndex));
+     jMediaRecorder1.SetOutputFormat(fmtThreeGpp);
+     jMediaRecorder1.SetAudioEncoder(fmtAmrNB);
+     jMediaRecorder1.SetOutputFile(Self.GetEnvironmentDirectoryPath(dirMusic),  jEditText1.Text+DateToStr(Now,formato)+'_'+timetostr(now,formato)+'.3gp');
+     jMediaRecorder1.Prepare();
+     jMediaRecorder1.Start();
+  end   //NEW! Target API >= 23
+  else
+  if IsRuntimePermissionGranted('android.permission.RECORD_AUDIO') and IsRuntimePermissionGranted('android.permission.WRITE_EXTERNAL_STORAGE')  then
+  begin
+    ShowMessage('Recording started ... [start]');
+    jMediaRecorder1.SetAudioSource(TAudioSource(jSpinner2.SelectedIndex));
+    jMediaRecorder1.SetOutputFormat(fmtThreeGpp);
+    jMediaRecorder1.SetAudioEncoder(fmtAmrNB);
+    jMediaRecorder1.SetOutputFile(Self.GetEnvironmentDirectoryPath(dirMusic),  jEditText1.Text+DateToStr(Now,formato)+'_'+timetostr(now,formato)+'.3gp');
+    jMediaRecorder1.Prepare();
+    jMediaRecorder1.Start();
+  end
+  else
+  begin
+    ShowMessage('Sorry.. [RECORD_AUDIO/WRITE_EXTERNAL_STORAGE] Permission NOT granted..');
+  end;
+end;
+
 procedure TRellama.Finalizar(Sender: TObject);
 begin
   llamando:=false;
   jTimer1.Enabled:=false;
   jTextView1.Text:='';
   jButton1.OnClick:=Rellama.jButton1Click;
+  if jCheckBox2.Checked then
+    jMediaRecorder1.Stop();
+  jNotificationManager1.CancelAll();
 end;
 
 procedure TRellama.jButton1Click(Sender: TObject);
+var
+  encodehash,ussdcode:string;
 begin
   if intentos>0 then
   begin
@@ -103,13 +177,22 @@ begin
       llamando:=true;
       jButton1.OnClick:=Rellama.Finalizar;
       jTextView1.Text:=inttostr(jSeekBar2.Progress);
-      jTelephonyManager1.Call(jEditText1.Text);
+      encodehash:=Self.UriEncode('#');
+      if jCheckBox3.Checked then
+        ussdcode:=StringReplace('#31#'+jEditText1.Text,'#',encodehash,[rfreplaceAll])
+      else
+        ussdcode:=StringReplace(jEditText1.Text,'#',encodehash,[rfreplaceAll]);
+      jTelephonyManager1.Call(ussdcode);
     end
     else
     begin
       ShowMessage('Debe conceder los permisos necesarios!!!');
     end;
     Rellama.SetKeepScreenOn(true);
+    if jCheckBox2.Checked then
+    begin
+      recordcall;
+    end;
    end
    else
      ShowMessage('Debe poner al menos 1 intento');
@@ -178,6 +261,22 @@ begin
   end;
 end;
 
+procedure TRellama.jCheckBox2Click(Sender: TObject);
+var
+  manifestPermissions: TDynArrayOfString;
+begin
+   //https://developer.android.com/guide/topics/security/permissions#normal-dangerous
+   //https://www.captechconsulting.com/blogs/runtime-permissions-best-practices-and-how-to-gracefully-handle-permission-removal
+  if IsRuntimePermissionNeed() then   // that is, target API >= 23
+   begin
+      SetLength(manifestPermissions, 2);
+      manifestPermissions[0]:= 'android.permission.RECORD_AUDIO';  //from AndroodManifest.xml
+      manifestPermissions[1]:= 'android.permission.WRITE_EXTERNAL_STORAGE'; //from AndroodManifest.xml
+      Self.RequestRuntimePermission(manifestPermissions, 2001);
+      SetLength(manifestPermissions, 0);
+   end;
+end;
+
 procedure TRellama.jEditText1Change(Sender: TObject; txt: string; count: integer
   );
 begin
@@ -215,15 +314,27 @@ procedure TRellama.jTelephonyManager1CallStateChanged(Sender: TObject;
   state: TTelephonyCallState; phoneNumber: string);
 begin
     case state of
-      csIdle: begin
+      csIdle:
+        begin
          jTelephonyManager1.SetSpeakerphoneOn(False);
-      end;
-      csRinging: begin
-         jTelephonyManager1.SetSpeakerphoneOn(jCheckBox1.Checked);
-      end;
-      csOffHook: begin
-         jTelephonyManager1.SetSpeakerphoneOn(jCheckBox1.Checked);
-      end;
+         if jCheckBox2.Checked then
+            jMediaRecorder1.Stop();
+         jNotificationManager1.CancelAll();
+        end;
+      csRinging:
+        begin
+          jTelephonyManager1.SetSpeakerphoneOn(jCheckBox1.Checked);
+          jNotificationManager1.SetContentIntent(gApp.PackageName, 'App', 'Rellama','Timbrando');
+          jNotificationManager1.Subject:='Timbrando';
+          jNotificationManager1.Notify();
+        end;
+      csOffHook:
+        begin
+          //jTelephonyManager1.SetSpeakerphoneOn(jCheckBox1.Checked);
+          //jNotificationManager1.SetContentIntent(gApp.PackageName, 'App', 'Rellama','Hablando');
+          //jNotificationManager1.Subject:='Hablando';
+          //jNotificationManager1.Notify();
+        end;
     end;
 end;
 
@@ -252,12 +363,7 @@ end;
 procedure TRellama.RellamaActivityCreate(Sender: TObject; intentData: jObject);
 begin
   llamando:=false;
-  jSpinner1.SelectedIndex:=jPreferences1.GetIntData('multiple',0);
-  jButton2.Text:=jPreferences1.GetStringData('lastname','Contactos');
-  jEditText1.Text:=jPreferences1.GetStringData('lastnumber','');
-  jSeekBar1.Progress:=jPreferences1.GetIntData('trycount',5);
-  jSeekBar2.Progress:=jPreferences1.GetIntData('delay',3);
-  jCheckBox1.Checked:=jPreferences1.GetBoolData('Speaker',false);
+  LoadPreferences;
   demora:=jSeekBar2.Progress;
 end;
 
@@ -273,12 +379,7 @@ begin
     if buscando=false then
     begin
       //ShowMessage('Hasta pronto');
-      jPreferences1.SetStringData('lastnumber',jEditText1.Text);
-      jPreferences1.SetStringData('lastname',jButton2.Text);
-      jPreferences1.SetIntData('trycount',jSeekBar1.Progress);
-      jPreferences1.SetIntData('delay',jSeekBar2.Progress);
-      jPreferences1.SetIntData('multiple',jSpinner1.SelectedIndex);
-      jPreferences1.SetBoolData('Speaker',jCheckBox1.Checked);
+      SavePreferences;
     end
     else
       ShowMessage('Seleccione un contacto...');
@@ -362,12 +463,7 @@ end;
 
 procedure TRellama.RellamaClose(Sender: TObject);
 begin
-  jPreferences1.SetStringData('lastnumber',jEditText1.Text);
-  jPreferences1.SetStringData('lastname',jButton2.Text);
-  jPreferences1.SetIntData('trycount',jSeekBar1.Progress);
-  jPreferences1.SetIntData('delay',jSeekBar2.Progress);
-  jPreferences1.SetIntData('multiple',jSpinner1.SelectedIndex);
-  jPreferences1.SetBoolData('Speaker',jCheckBox1.Checked);
+ SavePreferences;
 end;
 
 procedure TRellama.RellamaCreateContextMenu(Sender: TObject; jObjMenu: jObject);

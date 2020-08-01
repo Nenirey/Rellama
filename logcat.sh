@@ -1,1 +1,1 @@
-/lamw/android-sdk-windows/platform-tools/adb logcat
+/lamw/SDK/platform-tools/adb logcat &

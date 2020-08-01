@@ -4,8 +4,8 @@ object Rellama: TRellama
   MarginRight = 0
   MarginBottom = 0
   Enabled = True
-  Left = 477
-  Top = 198
+  Left = 775
+  Top = 129
   Width = 300
   Height = 447
   Text = 'Rellama v1.0'
@@ -189,7 +189,7 @@ object Rellama: TRellama
     Enabled = True
     Left = 10
     Top = 200
-    Width = 284
+    Width = 285
     Height = 23
     Visible = True
     Anchor = jTextView3
@@ -304,43 +304,148 @@ object Rellama: TRellama
     Checked = False
     FontSizeUnit = unitDefault
   end
+  object jCheckBox2: jCheckBox
+    MarginLeft = 5
+    MarginTop = 2
+    MarginRight = 5
+    MarginBottom = 5
+    Enabled = True
+    Left = 5
+    Top = 267
+    Width = 196
+    Height = 32
+    Visible = True
+    Anchor = jCheckBox1
+    PosRelativeToAnchor = [raBelow]
+    PosRelativeToParent = [rpLeft]
+    LayoutParamWidth = lpWrapContent
+    LayoutParamHeight = lpWrapContent
+    Text = 'Intentar grabar llamada'
+    BackgroundColor = colbrDefault
+    FontColor = colbrWhite
+    FontSize = 0
+    Checked = False
+    FontSizeUnit = unitDefault
+    OnClick = jCheckBox2Click
+  end
+  object jSpinner2: jSpinner
+    MarginLeft = 5
+    MarginTop = 5
+    MarginRight = 5
+    MarginBottom = 5
+    Enabled = True
+    Left = 211
+    Top = 268
+    Width = 84
+    Height = 30
+    Visible = True
+    Anchor = jCheckBox2
+    PosRelativeToAnchor = [raToEndOf, raAlignBaseline]
+    PosRelativeToParent = [rpRight]
+    LayoutParamWidth = lp72px
+    LayoutParamHeight = lpWrapContent
+    Items.Strings = (
+      'Default'
+      'Mic'
+      'VoiceUpLink'
+      'VoiceDownLink'
+      'VoiceCall'
+      'CamCorder'
+      'Recognition'
+      'VoiceCommunication'
+    )
+    BackgroundColor = colbrBlack
+    SelectedFontColor = colbrWhite
+    DropListTextColor = colbrWhite
+    DropListBackgroundColor = colbrBlack
+    LastItemAsPrompt = False
+    FontSize = 0
+    FontSizeUnit = unitDefault
+    Alignment = taCenter
+    TextTypeFace = tfNormal
+    SelectedIndex = 0
+    GravityInParent = lgNone
+    SelectedPaddingTop = 15
+    SelectedPaddingBottom = 5
+    OnItemSelected = jSpinner1ItemSelected
+  end
+  object jCheckBox3: jCheckBox
+    MarginLeft = 5
+    MarginTop = 2
+    MarginRight = 5
+    MarginBottom = 5
+    Enabled = True
+    Left = 5
+    Top = 306
+    Width = 138
+    Height = 32
+    Visible = True
+    Anchor = jCheckBox2
+    PosRelativeToAnchor = [raBelow]
+    PosRelativeToParent = [rpLeft]
+    LayoutParamWidth = lpWrapContent
+    LayoutParamHeight = lpWrapContent
+    Text = 'Numero oculto'
+    BackgroundColor = colbrDefault
+    FontColor = colbrWhite
+    FontSize = 0
+    Checked = False
+    FontSizeUnit = unitDefault
+  end
   object jIntentManager1: jIntentManager
     IntentAction = iaCall
-    left = 64
-    top = 5
+    Left = 64
+    Top = 5
   end
   object jTimer1: jTimer
     Enabled = False
     Interval = 1000
     OnTimer = jTimer1Timer
-    left = 5
-    top = 5
+    Left = 5
+    Top = 5
   end
   object jContactManager1: jContactManager
     OnGetContactsProgress = jContactManager1GetContactsProgress
-    left = 40
-    top = 264
+    Left = 88
+    Top = 320
   end
   object jTextFileManager1: jTextFileManager
-    left = 232
-    top = 264
+    Left = 240
+    Top = 56
   end
   object jTelephonyManager1: jTelephonyManager
     OnCallStateChanged = jTelephonyManager1CallStateChanged
-    left = 232
-    top = 5
+    Left = 232
+    Top = 5
   end
   object jPreferences1: jPreferences
     IsShared = False
-    left = 232
-    top = 328
+    Left = 232
+    Top = 328
   end
   object jMenu1: jMenu
-    left = 40
-    top = 320
+    Left = 40
+    Top = 320
   end
   object jContextMenu1: jContextMenu
-    left = 140
-    top = 245
+    Left = 96
+    Top = 56
+  end
+  object jMediaRecorder1: jMediaRecorder
+    Left = 136
+    Top = 360
+  end
+  object jNotificationManager1: jNotificationManager
+    Id = 1001
+    Title = 'Lamw'
+    Subject = 'Hello'
+    Body = 'Lamw: Hello System Notification ...'
+    IconIdentifier = 'ic_launcher'
+    LightsColor = colbrDefault
+    AutoCancel = True
+    Ongoing = False
+    PendingFlag = pfUpdateCurrent
+    Left = 216
+    Top = 216
   end
 end

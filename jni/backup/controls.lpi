@@ -22,10 +22,10 @@
       <Item0 Name="BuildSystem" Value="Ant"/>
       <Item1 Name="LAMW" Value="GUI"/>
       <Item2 Name="LamwVersion" Value="0.8.5"/>
-      <Item3 Name="NdkApi" Value="android-27"/>
-      <Item4 Name="NdkPath" Value="C:\lamw\android-ndk-r16b\"/>
+      <Item3 Name="NdkApi" Value="android-22"/>
+      <Item4 Name="NdkPath" Value="D:\lamw\android-ndk-r16b\"/>
       <Item5 Name="Package" Value="com.example.appintentdemo3"/>
-      <Item6 Name="SdkPath" Value="C:\lamw\android-sdk-windows\"/>
+      <Item6 Name="SdkPath" Value="D:\lamw\SDK\"/>
       <Item7 Name="StartModule" Value="Rellama"/>
       <Item8 Name="Support" Value="FALSE"/>
       <Item9 Name="Theme" Value="DeviceDefault"/>
@@ -58,7 +58,7 @@
         <ComponentName Value="Rellama"/>
         <HasResources Value="True"/>
         <CustomData Count="1">
-          <Item0 Name="jControls" Value="jButton;jCheckBox;jContactManager;jContextMenu;jEditText;jForm;jIntentManager;jMenu;jPreferences;jSeekBar;jSpinner;jTelephonyManager;jTextFileManager;jTextView;jTimer"/>
+          <Item0 Name="jControls" Value="jButton;jCheckBox;jContactManager;jContextMenu;jEditText;jForm;jIntentManager;jMediaRecorder;jMenu;jNotificationManager;jPreferences;jSeekBar;jSpinner;jTelephonyManager;jTextFileManager;jTextView;jTimer"/>
         </CustomData>
       </Unit1>
     </Units>
@@ -70,7 +70,7 @@
       <Filename Value="..\libs\armeabi-v7a\libcontrols"/>
     </Target>
     <SearchPaths>
-      <Libraries Value="C:\lamw\android-ndk-r16b\platforms\android-27\arch-arm\usr\lib\;C:\lamw\android-ndk-r16b\toolchains\arm-linux-androideabi-4.9\prebuilt\windows-x86_64\lib\gcc\arm-linux-androideabi\4.9.x\"/>
+      <Libraries Value="D:\lamw\android-ndk-r16b\platforms\android-22\arch-arm\usr\lib\;D:\lamw\android-ndk-r16b\toolchains\arm-linux-androideabi-4.9\prebuilt\windows-x86_64\lib\gcc\arm-linux-androideabi\4.9.x\"/>
       <UnitOutputDirectory Value="..\obj\controls"/>
     </SearchPaths>
     <Parsing>
@@ -99,7 +99,7 @@
       </Options>
     </Linking>
     <Other>
-      <CustomOptions Value="-Xd -CfSoft -CpARMV7A -XParm-linux-androideabi- -FDC:\lamw\android-ndk-r16b\toolchains\arm-linux-androideabi-4.9\prebuilt\windows-x86_64\bin"/>
+      <CustomOptions Value="-Xd -CfSoft -CpARMV7A -XParm-linux-androideabi- -FDD:\lamw\android-ndk-r16b\toolchains\arm-linux-androideabi-4.9\prebuilt\windows-x86_64\bin"/>
     </Other>
   </CompilerOptions>
   <Debugging>

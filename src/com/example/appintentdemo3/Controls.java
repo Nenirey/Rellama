@@ -1137,10 +1137,29 @@ class jForm {
 	public void SetIconActionBar(String _iconIdentifier) {
 //[ifdef_api14up]
 		Drawable d = GetDrawableResourceById(GetDrawableResourceId(_iconIdentifier));
-
-		if (d != null) // by tr3e
-			jCommons.ActionBarSetIcon(controls, d);
+		
+		jCommons.ActionBarSetIcon(controls, d);
 //[endif_api14up]
+	}
+	
+	//By ADiV
+	public void SetActionBarShowHome(boolean showHome) {
+		   jCommons.ActionBarShowHome(controls, showHome);
+	}
+
+	//By ADiV
+	public void SetActionBarColor(int color) {
+		   jCommons.ActionBarSetColor(controls, color);
+	}
+
+	//By ADiV
+	public void SetNavigationColor(int color) {
+		   jCommons.NavigationSetColor(controls, color);
+	}
+
+	//By ADiV
+	public void SetStatusColor(int color) {
+		   jCommons.StatusSetColor(controls, color);
 	}
 
 	public void SetTabNavigationModeActionBar() {
@@ -2723,9 +2742,17 @@ public java.lang.Object jIntentManager_jCreate(long _Self) {
    return (java.lang.Object)(new jIntentManager(this,_Self));
 }      
 
+public java.lang.Object jMediaRecorder_jCreate(long _Self) {
+  return (java.lang.Object)(new jMediaRecorder(this,_Self));
+} 
+
 public java.lang.Object jMenu_jCreate(long _Self) {
    return (java.lang.Object)(new jMenu(this,_Self));
 }
+
+public java.lang.Object jNotificationManager_jCreate(long _Self) {
+   return (java.lang.Object)(new jNotificationManager(this,_Self));
+}   
 
 public java.lang.Object jPreferences_jCreate(long _Self, boolean _IsShared) {
    return (java.lang.Object)(new jPreferences(this,_Self,_IsShared));
